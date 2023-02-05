@@ -28,9 +28,6 @@ class SignUpFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        auth = FirebaseAuth.getInstance()
-        firebaseFirestore = FirebaseFirestore.getInstance()
-
     }
 
     override fun onCreateView(
@@ -41,12 +38,13 @@ class SignUpFragment : Fragment() {
         _binding = FragmentSignUpBinding.inflate(inflater, container, false)
         val view = binding.root
         return view
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        auth = FirebaseAuth.getInstance()
+        firebaseFirestore = FirebaseFirestore.getInstance()
 
 
         binding.createAccountButton.setOnClickListener(View.OnClickListener {
