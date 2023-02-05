@@ -9,6 +9,27 @@
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="don_t_have_an_account">Don\'t have an account?</string>
+    <string name="sign_up">Sign up.</string>
+    <string name="full_name">Full Name</string>
+    <string name="e_mail">E-mail</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="create_account">Create Account</string>
+    <string name="already_have_an_account">Already have an account?</string>
+    <string name="log_in">Log in.</string>
+    <string name="log_in_button_text">Log in</string>
+    <string name="age">Age</string>
+    <string name="get_help_logging_in">Get help logging in.</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="enter_your_e_mail">Enter your e-mail</string>
+    <string name="login_help">Login help</string>
+    <string name="logout">Logout</string>
+    <string name="sign_out">Sign out</string>
+    <string name="save">Save</string>
+    <string name="delete">Delete</string>
+
+
+
 </resources>
