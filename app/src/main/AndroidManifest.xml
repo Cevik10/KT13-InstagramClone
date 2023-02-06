@@ -17,7 +17,7 @@
             android:name=".activity.FeedActivity"
             android:exported="false"
             android:label="@string/title_activity_home"
-            android:theme="@style/Theme.InstaClone.NoActionBar" />
+            android:theme="@style/Theme.InstaClone" />
         <activity
             android:name=".activity.MainActivity"
             android:exported="true">

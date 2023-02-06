@@ -21,8 +21,8 @@ class SignUpFragment : Fragment() {
     private var _binding: FragmentSignUpBinding? = null
     private val binding get() = _binding!!
 
-    private var auth: FirebaseAuth? = null
-    private var firebaseFirestore: FirebaseFirestore? = null
+    private lateinit var auth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -87,7 +87,7 @@ class SignUpFragment : Fragment() {
             binding.progressBar.visibility = View.VISIBLE
             binding.createAccountButton.isEnabled = false
 
-            auth!!.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
+            auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
                 val user = User(name, age, email)
                 val userAuth = HashMap<String, Any>()
                 userAuth["FullName"] = user.fullName
@@ -95,13 +95,13 @@ class SignUpFragment : Fragment() {
                 userAuth["Email"] = user.email
 
 
-                firebaseFirestore!!.collection("Users").document(auth!!.currentUser!!.uid).set(userAuth).addOnSuccessListener {
+                firebaseFirestore.collection("Users").document(auth.currentUser!!.uid).set(userAuth).addOnSuccessListener {
 
                     Toast.makeText(requireActivity().applicationContext, "Account has been created successfully!", Toast.LENGTH_LONG).show()
                     binding.progressBar.visibility = View.GONE
                     binding.createAccountButton.isEnabled = true
 
-                    val intent = Intent(activity,FeedActivity::class.java)
+                    val intent = Intent(activity, FeedActivity::class.java)
                     startActivity(intent)
                     requireActivity().finish()
 

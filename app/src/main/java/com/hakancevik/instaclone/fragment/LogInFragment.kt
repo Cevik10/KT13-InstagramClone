@@ -20,7 +20,7 @@ class LogInFragment : Fragment() {
     private var _binding: FragmentLogInBinding? = null
     private val binding get() = _binding!!
 
-    private var auth: FirebaseAuth? = null
+    private lateinit var auth: FirebaseAuth
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +44,7 @@ class LogInFragment : Fragment() {
 
         auth = FirebaseAuth.getInstance()
 
-        val currentUser = auth!!.currentUser
+        val currentUser = auth.currentUser
 
         if (currentUser != null) {
             intentToFeedActivity()
@@ -77,8 +77,9 @@ class LogInFragment : Fragment() {
             binding.progressBar.visibility = View.VISIBLE
             binding.loginButton.isEnabled = false
 
-            auth!!.signInWithEmailAndPassword(userEmail, userPassword).addOnSuccessListener {
-
+            auth.signInWithEmailAndPassword(userEmail, userPassword).addOnSuccessListener {
+                binding.loginButton.isEnabled = true
+                binding.progressBar.visibility = View.GONE
                 intentToFeedActivity()
 
             }.addOnFailureListener {
