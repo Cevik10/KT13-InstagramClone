@@ -27,7 +27,7 @@
             android:ems="10"
             android:hint="Comment"
             android:inputType="textPersonName"
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <androidx.appcompat.widget.AppCompatImageButton
             android:id="@+id/sentButton"
@@ -53,6 +53,7 @@
         app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/select_image"
         tools:src="@tools:sample/avatars" />
 
 

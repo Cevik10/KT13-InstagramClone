@@ -63,7 +63,7 @@
 
 
         android:layout_marginTop="27dp"
-        android:hint="Password:"
+        android:hint="Password"
 
         android:paddingHorizontal="30dp"
         android:textColorHint="#474141"
@@ -91,7 +91,10 @@
         android:id="@+id/signUpLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#07000000"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="#07000000"
         android:orientation="horizontal"
         android:padding="13dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -150,7 +153,11 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
 
-        android:background="@drawable/custom_text_lines"
+        android:background="?android:selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/custom_text_lines"
+
 
         android:orientation="horizontal"
         android:padding="13dp"
@@ -170,7 +177,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginEnd="3dp"
-                android:text="Forgot password"
+                android:text="Forgot password? "
                 android:textAlignment="center"
                 android:textSize="15sp" />
 
@@ -179,7 +186,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Get help logging in"
+                android:text="Get help logging in."
                 android:textAlignment="center"
                 android:textColor="#2A2439"
                 android:textSize="16sp"
