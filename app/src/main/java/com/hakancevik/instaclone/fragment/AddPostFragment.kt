@@ -18,10 +18,17 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
+import androidx.navigation.Navigation
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.hakancevik.instaclone.R
 import com.hakancevik.instaclone.databinding.FragmentAddPostBinding
 import java.io.IOException
+import java.util.UUID
 
 
 class AddPostFragment : Fragment() {
@@ -32,6 +39,10 @@ class AddPostFragment : Fragment() {
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
     private var selectedImage: Uri? = null
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
+    private lateinit var firebaseStorage: FirebaseStorage
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +64,10 @@ class AddPostFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         registerLauncher()
+
+        auth = FirebaseAuth.getInstance()
+        firebaseFirestore = FirebaseFirestore.getInstance()
+        firebaseStorage = FirebaseStorage.getInstance()
 
 
         binding.imageView.setOnClickListener {
@@ -79,7 +94,56 @@ class AddPostFragment : Fragment() {
         }
 
 
-        binding.sentButton.setOnClickListener {
+        binding.uploadButton.setOnClickListener {
+
+            binding.progressBarUpload.isVisible = true
+
+            val uuid = UUID.randomUUID()
+            val imageName = "${uuid}.jpg"
+
+            val reference = firebaseStorage.reference
+            val imageReference = reference.child("images").child(imageName)
+
+            if (selectedImage != null) {
+                imageReference.putFile(selectedImage!!).addOnSuccessListener {
+
+                    // download url -> firestore
+                    val uploadedImageReference = firebaseStorage.reference.child("images").child(imageName)
+                    uploadedImageReference.downloadUrl.addOnSuccessListener {
+
+                        val downloadUrl = it.toString()
+                        val comment = binding.commentEditText.text.toString().trim()
+
+                        val postMap = hashMapOf<String, Any>()
+                        postMap.put("imageUrl", downloadUrl)
+                        postMap.put("comment", comment)
+                        postMap.put("date", Timestamp.now())
+
+                        firebaseFirestore.collection("Users").document(auth.currentUser!!.uid).collection("Posts").add(postMap).addOnSuccessListener {
+
+                            binding.progressBarUpload.isVisible = false
+                            Toast.makeText(requireContext().applicationContext, "Successfully Saved!", Toast.LENGTH_LONG).show()
+                            val action = AddPostFragmentDirections.actionAddPostFragmentToHomeFragment()
+                            Navigation.findNavController(requireView()).navigate(action)
+
+
+                        }.addOnFailureListener {
+                            binding.progressBarUpload.isVisible = false
+                            Toast.makeText(requireContext().applicationContext, it.localizedMessage, Toast.LENGTH_LONG).show()
+                        }
+
+
+                    }.addOnFailureListener {
+                        binding.progressBarUpload.isVisible = false
+                        Toast.makeText(requireContext().applicationContext, it.localizedMessage, Toast.LENGTH_LONG).show()
+                    }
+
+
+                }.addOnFailureListener {
+                    binding.progressBarUpload.isVisible = false
+                    Toast.makeText(requireContext().applicationContext, it.localizedMessage, Toast.LENGTH_LONG).show()
+                }
+            }
 
         }
 
