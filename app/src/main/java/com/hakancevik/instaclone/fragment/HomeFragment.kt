@@ -2,16 +2,21 @@ package com.hakancevik.instaclone.fragment
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.hakancevik.instaclone.R
 import com.hakancevik.instaclone.activity.FeedActivity
 import com.hakancevik.instaclone.activity.MainActivity
 import com.hakancevik.instaclone.databinding.FragmentHomeBinding
+import com.hakancevik.instaclone.model.Post
 import org.checkerframework.checker.units.qual.Length
+import java.util.Date
 
 
 class HomeFragment : Fragment() {
@@ -20,6 +25,9 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var firebaseFirestore: FirebaseFirestore
+
+    private lateinit var postArrayList: ArrayList<Post>
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +78,45 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
+        firebaseFirestore = FirebaseFirestore.getInstance()
+
+        postArrayList = ArrayList<Post>()
+
+        getData()
+
+
+    }
+
+    private fun getData() {
+
+
+        firebaseFirestore.collection("Users").document(auth.currentUser!!.uid).collection("Posts").addSnapshotListener { value, error ->
+
+            if (error != null) {
+                Toast.makeText(requireContext().applicationContext, error.localizedMessage, Toast.LENGTH_LONG).show()
+            }
+
+            if (value != null) {
+                if (!value.isEmpty) {
+
+                    val documents = value.documents
+
+                    for (document in documents) {
+                        val comment = document.get("comment") as String
+                        val imageUrl = document.get("imageUrl") as String
+                        val date = document.get("date") as Timestamp
+
+                        val post = Post(comment,imageUrl,date)
+                        postArrayList.add(post)
+
+                    }
+
+
+                }
+            }
+
+
+        }
 
 
     }
