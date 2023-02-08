@@ -69,8 +69,10 @@ class AddPostFragment : Fragment() {
         firebaseFirestore = FirebaseFirestore.getInstance()
         firebaseStorage = FirebaseStorage.getInstance()
 
+        binding.selectImageText.isVisible = true
+        binding.imageView.isVisible = false
 
-        binding.imageView.setOnClickListener {
+        binding.selectImageText.setOnClickListener {
             if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 if (ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), android.Manifest.permission.READ_EXTERNAL_STORAGE)) {
                     // rationale
@@ -90,7 +92,12 @@ class AddPostFragment : Fragment() {
                 val intentToGallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
                 activityResultLauncher.launch(intentToGallery)
             }
+        }
 
+
+        binding.imageView.setOnClickListener {
+            val intentToGallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            activityResultLauncher.launch(intentToGallery)
         }
 
 
@@ -116,7 +123,7 @@ class AddPostFragment : Fragment() {
                         val email = auth.currentUser!!.email
 
                         val postMap = hashMapOf<String, Any>()
-                        postMap.put("email",email!!)
+                        postMap.put("email", email!!)
                         postMap.put("imageUrl", downloadUrl)
                         postMap.put("comment", comment)
                         postMap.put("date", Timestamp.now())
@@ -161,6 +168,8 @@ class AddPostFragment : Fragment() {
                     selectedImage = intentFromResult.data
 
                     selectedImage?.let {
+                        binding.selectImageText.isVisible = false
+                        binding.imageView.isVisible = true
                         binding.imageView.setImageURI(it)
                     }
                 }

@@ -1,6 +1,5 @@
 package com.hakancevik.instaclone.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -8,8 +7,10 @@ import com.hakancevik.instaclone.databinding.RecyclerRowBinding
 import com.hakancevik.instaclone.model.Post
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
-class PostAdapter(val postArrayList: ArrayList<Post>) : RecyclerView.Adapter<PostAdapter.PostHolder>() {
+class PostAdapter(private val postArrayList: ArrayList<Post>) : RecyclerView.Adapter<PostAdapter.PostHolder>() {
 
     class PostHolder(val binding: RecyclerRowBinding) : RecyclerView.ViewHolder(binding.root) {
 
@@ -26,9 +27,9 @@ class PostAdapter(val postArrayList: ArrayList<Post>) : RecyclerView.Adapter<Pos
 
     override fun onBindViewHolder(holder: PostHolder, position: Int) {
 
-        val timestamp = postArrayList.get(position).date
+        val timestamp = postArrayList[position].date
         val date = timestamp.toDate()
-        val dateFormated = SimpleDateFormat("dd/MM/yyyy").format(date)
+        val dateFormated = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault()).format(date)
 
 
         holder.binding.recyclerViewEmailText.text = postArrayList[position].email
