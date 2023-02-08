@@ -90,9 +90,9 @@ class SignUpFragment : Fragment() {
             auth.createUserWithEmailAndPassword(email, password).addOnSuccessListener {
                 val user = User(name, age, email)
                 val userAuth = HashMap<String, Any>()
-                userAuth["FullName"] = user.fullName
-                userAuth["Age"] = user.age
-                userAuth["Email"] = user.email
+                userAuth["fullName"] = user.fullName
+                userAuth["age"] = user.age
+                userAuth["email"] = user.email
 
 
                 firebaseFirestore.collection("Users").document(auth.currentUser!!.uid).set(userAuth).addOnSuccessListener {

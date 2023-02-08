@@ -113,13 +113,15 @@ class AddPostFragment : Fragment() {
 
                         val downloadUrl = it.toString()
                         val comment = binding.commentEditText.text.toString().trim()
+                        val email = auth.currentUser!!.email
 
                         val postMap = hashMapOf<String, Any>()
+                        postMap.put("email",email!!)
                         postMap.put("imageUrl", downloadUrl)
                         postMap.put("comment", comment)
                         postMap.put("date", Timestamp.now())
 
-                        firebaseFirestore.collection("Users").document(auth.currentUser!!.uid).collection("Posts").add(postMap).addOnSuccessListener {
+                        firebaseFirestore.collection("Posts").add(postMap).addOnSuccessListener {
 
                             binding.progressBarUpload.isVisible = false
                             Toast.makeText(requireContext().applicationContext, "Successfully Saved!", Toast.LENGTH_LONG).show()

@@ -7,12 +7,15 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.hakancevik.instaclone.R
 import com.hakancevik.instaclone.activity.FeedActivity
 import com.hakancevik.instaclone.activity.MainActivity
+import com.hakancevik.instaclone.adapter.PostAdapter
 import com.hakancevik.instaclone.databinding.FragmentHomeBinding
 import com.hakancevik.instaclone.model.Post
 import org.checkerframework.checker.units.qual.Length
@@ -28,6 +31,7 @@ class HomeFragment : Fragment() {
     private lateinit var firebaseFirestore: FirebaseFirestore
 
     private lateinit var postArrayList: ArrayList<Post>
+    private lateinit var postAdapter: PostAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,15 +86,20 @@ class HomeFragment : Fragment() {
 
         postArrayList = ArrayList<Post>()
 
-        getData()
+        getDataFromFirestore()
+
+
+        binding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        postAdapter = PostAdapter(postArrayList)
+        binding.recyclerView.adapter = postAdapter
 
 
     }
 
-    private fun getData() {
+    private fun getDataFromFirestore() {
 
 
-        firebaseFirestore.collection("Users").document(auth.currentUser!!.uid).collection("Posts").addSnapshotListener { value, error ->
+        firebaseFirestore.collection("Posts").orderBy("date", Query.Direction.DESCENDING).addSnapshotListener { value, error ->
 
             if (error != null) {
                 Toast.makeText(requireContext().applicationContext, error.localizedMessage, Toast.LENGTH_LONG).show()
@@ -101,15 +110,20 @@ class HomeFragment : Fragment() {
 
                     val documents = value.documents
 
+                    postArrayList.clear()
+
                     for (document in documents) {
+                        val email = document.get("email") as String
                         val comment = document.get("comment") as String
                         val imageUrl = document.get("imageUrl") as String
                         val date = document.get("date") as Timestamp
 
-                        val post = Post(comment,imageUrl,date)
+                        val post = Post(email, comment, imageUrl, date)
                         postArrayList.add(post)
 
                     }
+
+                    postAdapter.notifyDataSetChanged()
 
 
                 }
