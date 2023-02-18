@@ -4,8 +4,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
 import com.hakancevik.instaclone.databinding.ActivityFeedBinding
+import com.hakancevik.instaclone.bottomsheet.ActionBottomDialogFragment
+import com.hakancevik.instaclone.bottomsheet.ProgressBarBottomDialogFragment
 
-class FeedActivity : AppCompatActivity() {
+class FeedActivity : AppCompatActivity(), ActionBottomDialogFragment.ItemClickListener, ProgressBarBottomDialogFragment.ItemClickListener {
 
     private lateinit var binding: ActivityFeedBinding
 
@@ -17,4 +19,9 @@ class FeedActivity : AppCompatActivity() {
 
 
     }
+
+    override fun onItemClick(item: String) {
+
+    }
+
 }

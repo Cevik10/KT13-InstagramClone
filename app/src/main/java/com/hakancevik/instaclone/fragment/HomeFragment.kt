@@ -98,7 +98,6 @@ class HomeFragment : Fragment() {
 
     private fun getDataFromFirestore() {
 
-
         firebaseFirestore.collection("Posts").orderBy("date", Query.Direction.DESCENDING).addSnapshotListener { value, error ->
 
             if (error != null) {

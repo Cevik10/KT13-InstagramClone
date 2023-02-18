@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/bottomSheetDesign"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/custom_dialog_background"
+    android:orientation="vertical"
+    app:behavior_hideable="true"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+        <View
+            android:layout_width="39dp"
+            android:layout_height="4dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="5dp"
+            android:alpha=".5"
+            android:background="@color/black" />
+
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:text="Upload Image"
+            android:textColor="@color/black"
+            android:textSize="19sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="8dp"
+            android:alpha=".1"
+            android:background="@color/black" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/recordSavedNameTextLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="13dp"
+            android:hint="Description:"
+            android:textColorHint="#474141"
+            app:boxStrokeColor="@color/white"
+            app:boxStrokeWidth="0dp"
+
+            app:boxStrokeWidthFocused="0dp"
+            app:hintTextColor="#8F8F8F"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            tools:layout_editor_absoluteX="9dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/bottomSheetDescriptionText"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/select_image_border"
+                android:inputType="text"
+                android:maxLength="33"
+                android:textSize="19sp"
+                tools:ignore="TextContrastCheck" />
+
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayout3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="21dp"
+            android:orientation="horizontal"
+            android:weightSum="4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.842"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="144dp">
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bottomSheetCancelButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="17dp"
+                android:layout_marginEnd="5dp"
+                android:layout_weight="2"
+                android:background="@drawable/custom_button_background"
+                android:backgroundTint="#DD8484"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="@drawable/ripple_select_button"
+                android:text="Cancel"
+                android:textAllCaps="false"
+                android:textColor="#4E4C4C"
+                android:textSize="19sp"
+                android:textStyle="bold"
+                tools:ignore="TextContrastCheck" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/bottomSheetSaveButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="17dp"
+                android:layout_weight="2"
+                android:background="@drawable/custom_button_background"
+                android:backgroundTint="#3090BD"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="@drawable/ripple_select_button"
+
+                android:text="@string/save"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="19sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

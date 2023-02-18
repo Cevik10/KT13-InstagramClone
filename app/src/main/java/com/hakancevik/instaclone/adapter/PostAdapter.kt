@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.hakancevik.instaclone.databinding.RecyclerRowBinding
 import com.hakancevik.instaclone.model.Post
+
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*

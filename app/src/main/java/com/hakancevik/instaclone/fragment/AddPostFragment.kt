@@ -2,13 +2,9 @@ package com.hakancevik.instaclone.fragment
 
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.ImageDecoder
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,16 +15,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.navigation.Navigation
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import com.hakancevik.instaclone.R
+
+import com.hakancevik.instaclone.bottomsheet.ActionBottomDialogFragment
 import com.hakancevik.instaclone.databinding.FragmentAddPostBinding
-import java.io.IOException
-import java.util.UUID
 
 
 class AddPostFragment : Fragment() {
@@ -38,11 +29,10 @@ class AddPostFragment : Fragment() {
 
     private lateinit var activityResultLauncher: ActivityResultLauncher<Intent>
     private lateinit var permissionLauncher: ActivityResultLauncher<String>
-    private var selectedImage: Uri? = null
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var firebaseFirestore: FirebaseFirestore
-    private lateinit var firebaseStorage: FirebaseStorage
+    companion object {
+        var selectedImage: Uri? = null
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,12 +55,10 @@ class AddPostFragment : Fragment() {
 
         registerLauncher()
 
-        auth = FirebaseAuth.getInstance()
-        firebaseFirestore = FirebaseFirestore.getInstance()
-        firebaseStorage = FirebaseStorage.getInstance()
-
         binding.selectImageText.isVisible = true
         binding.imageView.isVisible = false
+        binding.nextButton.isVisible = false
+
 
         binding.selectImageText.setOnClickListener {
             if (ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
@@ -101,59 +89,8 @@ class AddPostFragment : Fragment() {
         }
 
 
-        binding.uploadButton.setOnClickListener {
-
-            binding.progressBarUpload.isVisible = true
-
-            val uuid = UUID.randomUUID()
-            val imageName = "${uuid}.jpg"
-
-            val reference = firebaseStorage.reference
-            val imageReference = reference.child("images").child(imageName)
-
-            if (selectedImage != null) {
-                imageReference.putFile(selectedImage!!).addOnSuccessListener {
-
-                    // download url -> firestore
-                    val uploadedImageReference = firebaseStorage.reference.child("images").child(imageName)
-                    uploadedImageReference.downloadUrl.addOnSuccessListener {
-
-                        val downloadUrl = it.toString()
-                        val comment = binding.commentEditText.text.toString().trim()
-                        val email = auth.currentUser!!.email
-
-                        val postMap = hashMapOf<String, Any>()
-                        postMap.put("email", email!!)
-                        postMap.put("imageUrl", downloadUrl)
-                        postMap.put("comment", comment)
-                        postMap.put("date", Timestamp.now())
-
-                        firebaseFirestore.collection("Posts").add(postMap).addOnSuccessListener {
-
-                            binding.progressBarUpload.isVisible = false
-                            Toast.makeText(requireContext().applicationContext, "Successfully Saved!", Toast.LENGTH_LONG).show()
-                            val action = AddPostFragmentDirections.actionAddPostFragmentToHomeFragment()
-                            Navigation.findNavController(requireView()).navigate(action)
-
-
-                        }.addOnFailureListener {
-                            binding.progressBarUpload.isVisible = false
-                            Toast.makeText(requireContext().applicationContext, it.localizedMessage, Toast.LENGTH_LONG).show()
-                        }
-
-
-                    }.addOnFailureListener {
-                        binding.progressBarUpload.isVisible = false
-                        Toast.makeText(requireContext().applicationContext, it.localizedMessage, Toast.LENGTH_LONG).show()
-                    }
-
-
-                }.addOnFailureListener {
-                    binding.progressBarUpload.isVisible = false
-                    Toast.makeText(requireContext().applicationContext, it.localizedMessage, Toast.LENGTH_LONG).show()
-                }
-            }
-
+        binding.nextButton.setOnClickListener {
+            showBottomSheetDialog()
         }
 
 
@@ -170,6 +107,7 @@ class AddPostFragment : Fragment() {
                     selectedImage?.let {
                         binding.selectImageText.isVisible = false
                         binding.imageView.isVisible = true
+                        binding.nextButton.isVisible = true
                         binding.imageView.setImageURI(it)
                     }
                 }
@@ -190,6 +128,13 @@ class AddPostFragment : Fragment() {
         }
 
     }
+
+
+    private fun showBottomSheetDialog() {
+        val uploadImageBottomSheetDialog = ActionBottomDialogFragment.newInstance() as ActionBottomDialogFragment
+        uploadImageBottomSheetDialog.show(requireActivity().supportFragmentManager, ActionBottomDialogFragment.TAG)
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
